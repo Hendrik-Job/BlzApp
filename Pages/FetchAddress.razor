@@ -1,0 +1,53 @@
+﻿@page "/fetch-address"
+@using BlzApp.Interfaces
+@using BlzApp.Models
+@inject IAddressService AddressService
+@inject HttpClient Http
+
+<h1>Address List</h1>
+
+<p>
+    <a href="/address-add">New Address</a>
+</p>
+
+@if (_address_list == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var list in _address_list)
+            {
+                <tr>
+                    <td>@list.AddressCode</td>
+                    <td>@list.AddressName</td>
+                    <td>
+                        <a href='/address-edit/@list.AddressId'>Edit</a>  |
+                        <a href='/address-delete/@list.AddressId'>Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    IEnumerable<Address> _address_list;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _address_list = await AddressService.SelectCommand();
+    }
+}

@@ -1,0 +1,72 @@
+﻿@page "/address-delete/{id:int}"
+@using BlzApp.Interfaces
+@using BlzApp.Models
+@inject IAddressService AddressService
+@inject NavigationManager urlNavigationManager
+
+<h1>Delete a Address</h1>
+<p style="color:red;text-align:left">Are you sure you want to permanently delete this video? There is no undo!</p>
+
+
+<EditForm Model="@_address">
+    <DataAnnotationsValidator />
+    <div class="form-group row">
+        <label class="control-label col-md-12">Code</label>
+        <div class="col-md-4">
+            <input id="txt_name" class="form-control" @bind="_address.AddressCode" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="control-label col-md-12">Name</label>
+        <div class="col-md-4">
+            <input class="form-control" @bind="_address.AddressName" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="button" value="Delete" @onclick="@Delete" />
+        <input type="button" value="Cancel" @onclick="@Cancel" />
+    </div>
+</EditForm>
+
+
+@*<table class="editform">
+        <tr>
+            <td>Address Code:</td>
+            <td>@_address.AddressCode</td>
+        </tr>
+        <tr>
+            <td>Address Name:</td>
+            <td>@_address.AddressName</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align:center">
+                <input type="button" value="Delete" @onclick="@Delete" />
+                <input type="button" value="Cancel" @onclick="@Cancel" />
+            </td>
+        </tr>
+    </table>*@
+
+@code {
+
+    Address _address = new Address();
+
+    [Parameter]
+    public int id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _address = await AddressService.SelectCommandById(id);
+    }
+
+    protected async Task Delete()
+    {
+        await AddressService.DeleteCommand(id);
+        urlNavigationManager.NavigateTo("/fetch-address");
+    }
+    void Cancel()
+    {
+        urlNavigationManager.NavigateTo("/fetch-address");
+    }
+
+}
