@@ -51,13 +51,13 @@
 @code {
     Employee emp = new Employee();
 
-    //protected async override Task OnAfterRenderAsync(bool firstRender)
-    //{
-    //    if (firstRender)
-    //    {
-    //        await js.InvokeVoidAsync("focusById", "txt_name");
-    //    }
-    //}
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await js.InvokeVoidAsync("focusById", "txt_name");
+        }
+    }
 
     protected void CreateEmployee()
     {
